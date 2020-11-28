@@ -1,0 +1,71 @@
+query getLessons($status: ENUM_LESSON_STATUS) {
+  lessons(where: { status: $status }) {
+    status
+    id
+    title
+    time
+  }
+}
+
+query getLesson($id: ID!) {
+  lesson(id: $id) {
+    status
+    content
+    title
+    comments {
+      content
+      topOffset
+      content
+      leftOffset
+    }
+    uniq
+    readability
+    links
+  }
+}
+
+mutation updateLessonContent($id: ID!, $content: String) {
+  updateLesson(input: { where: { id: $id }, data: { content: $content } }) {
+    lesson {
+      id
+    }
+  }
+}
+
+mutation updateLessonStatus($id: ID!, $status: ENUM_LESSON_STATUS) {
+  updateLesson(input: { where: { id: $id }, data: { status: $status } }) {
+    lesson {
+      id
+    }
+  }
+}
+
+mutation createLesson($title: String) {
+  createLesson(input: { data: { title: $title } }) {
+    lesson {
+      id
+    }
+  }
+}
+
+mutation createComment(
+  $content: String
+  $topOffset: Int
+  $leftOffset: Int
+  $lesson: ID!
+) {
+  createComment(
+    input: {
+      data: {
+        content: $content
+        topOffset: $topOffset
+        leftOffset: $leftOffset
+        lesson: $lesson
+      }
+    }
+  ) {
+    comment {
+      id
+    }
+  }
+}
