@@ -1,13 +1,13 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React from "react";
+import { Box, PageWithHeader } from 'bumbag';
 import Head from "next/head";
 import { Provider as BumbagProvider, css } from "bumbag";
 import { ApolloProvider } from "@apollo/client";
 import { createGlobalStyle } from "styled-components";
-
-import { useApollo } from "lib/apolloClient";
 import "@babel/polyfill";
+import Header from "../components/Header";
 
 const GlobalStyle = createGlobalStyle`
 	#__next {
@@ -44,8 +44,21 @@ export default function App({ Component, pageProps }: Props) {
   return (
 
     <BumbagProvider theme={theme}>
-      <Component {...pageProps} />
-      <GlobalStyle />
+      <PageWithHeader
+        header={
+          <Header />
+        }
+        border="default"
+
+      >
+        <Box
+          padding="68px 128px 0 128px">
+          <Component {...pageProps} />
+        </Box>
+
+        <GlobalStyle />
+      </PageWithHeader>
+
     </BumbagProvider>
   );
 }
