@@ -156,10 +156,11 @@ const Tags: React.FC<TagsProps> = ({ defaultItems, onChange, disabled }) => {
             <Card>
               <SelectMenu
                 flex="1 1 50%"
+                marginBottom="20px"
                 hasSearch
                 onChange={setSkill}
                 options={skills}
-                placeholder="Грейд"
+                placeholder="Выберите навык"
                 value={skill}
               />
               <Modal.Disclosure

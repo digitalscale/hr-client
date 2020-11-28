@@ -2,14 +2,9 @@ import { Flex, Heading, SelectMenu, Card, Divider } from "bumbag";
 import React from "react";
 import { Input, InputField, Link, Text, Box, Button } from "bumbag";
 import Tags from "../components/Tags";
-import { vacancies } from "../utils";
+import { vacancies, experiencies, gbpDescription } from "../utils";
 import { group } from "console";
 
-const experiencies = [
-  { key: 1, label: "менее года", value: "busines" },
-  { key: 2, label: "1-3 года", value: "solution" },
-  { key: 3, label: "3+ лет", value: "solution" },
-];
 
 const grades = [
   { key: 1, label: "1 грейд", value: "busines" },
@@ -50,24 +45,21 @@ export const groups = [
 const groupsDescription = {
   inovation:
     "Мы разрабатываем, внедряем и поддерживаем платформу и решения по управлению бизнес-процессами компании от заказа командировок до управления целями и бизнес-инициативами. У нас в команде есть эксперты по поддержке платформы и приложений и нам очень не хватает разработчиков.",
-  micro: "asdasdd",
-  front: "asdasd",
+  micro: "Мы разрабатываем, внедряем и поддерживаем платформу и решения по управлению бизнес-процессами компании от заказа командировок до управления целями и бизнес-инициативами. У нас в команде есть эксперты по поддержке платформы и приложений и нам очень не хватает разработчиков.",
+  front: "Мы разрабатываем, внедряем и поддерживаем платформу и решения по управлению бизнес-процессами компании от заказа командировок до управления целями и бизнес-инициативами. У нас в команде есть эксперты по поддержке платформы и приложений и нам очень не хватает разработчиков.",
 };
 
-const gbpDescription = [
-  "интересные задачи (работы много, скучать не придётся)",
-  "открытая и быстрая обратная связь, реальная возможность влиять на решения",
-  '"белая" зарплата, официальное оформление',
-  "32 дня отпуска",
-  "внешнее обучение по корпоративным ценам (проф курсы, вебинары, английский язык)",
-  "в соц. сетях можно познакомиться с корпоративной культурой",
-];
+
 const Section = ({ children, title }) => (
   <Flex marginBottom="40px" flexDirection="column">
     {title && (
-      <Heading use="h4" marginBottom="50px">
-        {title}
-      </Heading>
+      <Flex justifyContent="space-between">
+        {" "}
+        <Heading use="h4" marginBottom="50px">
+          {title}
+        </Heading>
+        <Link>По умолчанию</Link>
+      </Flex>
     )}
     {children}
   </Flex>
@@ -86,6 +78,8 @@ interface Request {
   skills?: Skill[];
   duties?: string[];
   requirements?: string[];
+  experience: string;
+  group: string;
 }
 
 const New = () => {
@@ -242,7 +236,10 @@ const New = () => {
       </Flex>
       <Flex flex="1 1 10%" />
       <Flex flex="1 1 45%" alignItems="flex-end" flexDirection="column">
-      <Button palette="primary" marginBottom="35px" > Сохранить</Button>
+        <Button palette="primary" marginBottom="35px">
+          {" "}
+          Сохранить
+        </Button>
         <Card
           padding="32px"
           boxShadow="0px 4px 24px rgba(0, 0, 0, 0.1)"
