@@ -8,7 +8,7 @@ variables:
 build:
   stage: build
   script:
-    - docker build -t $IMAGE_TAG -f .docker/Dockerfile .
+    - docker build -t $IMAGE_TAG -f Dockerfile.prod .
     - docker push $IMAGE_TAG
 
 
