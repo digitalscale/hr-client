@@ -17,8 +17,8 @@ export interface VacancyShort {
     status: VacancyStatus;
     location?: string;
     department?: string;
-    created: number;
-    updated: number;
+    created: string;
+    updated: string;
 }
 export interface ListVanciesResponse {
     items: [VacancyShort];
