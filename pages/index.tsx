@@ -9,7 +9,7 @@ const mock = [
 		id: '3423432424',
 		title: 'React-разработчик',
 		status: 'active',
-		location: 'Москва',
+		area: 'Москва',
 		department: 'отдел комуникации',
 		created: '25',
 		updated: '26'
@@ -18,7 +18,7 @@ const mock = [
 		id: '3423432424',
 		title: 'Golang-разработчик',
 		status: 'active',
-		location: 'Ростов-на-Дону',
+		area: 'Ростов-на-Дону',
 		department: 'маркетинговая платформа',
 		created: '25',
 		updated: '26'
@@ -27,7 +27,7 @@ const mock = [
 		id: '3423432424',
 		title: 'Golang-разработчик',
 		status: 'inactive',
-		location: 'Рязань',
+		area: 'Рязань',
 		department: 'маркетинговая платформа',
 		created: '25',
 		updated: '26'
@@ -36,7 +36,7 @@ const mock = [
 		id: '3423432424',
 		title: 'Golang-разработчик',
 		status: 'inactive',
-		location: 'Москва',
+		area: 'Москва',
 		department: 'внутренние проекты',
 		created: '25',
 		updated: '26'
@@ -45,7 +45,7 @@ const mock = [
 		id: '3423432424',
 		title: 'Golang-разработчик',
 		status: 'inactive',
-		location: 'Казань',
+		area: 'Казань',
 		department: 'отдел комуникации',
 		created: '25',
 		updated: '26'
@@ -54,7 +54,7 @@ const mock = [
 		id: '3423432424',
 		title: 'Golang-разработчик',
 		status: 'inactive',
-		location: 'Санкт-Петербург',
+		area: 'Санкт-Петербург',
 		department: 'отдел разработки',
 		created: '25',
 		updated: '26'
@@ -110,8 +110,8 @@ const Filter = ({ changeFilter }) => {
 				setValueCity('');
 				serValueStatus('');
 				break
-			case 'location':
-				key = 'location';
+			case 'area':
+				key = 'area';
 				setValueCity(e);
 				setValueVacanci('');
 				serValueStatus('');
@@ -154,7 +154,7 @@ const Filter = ({ changeFilter }) => {
 					{ key: 4, label: 'Санкт-Петербург', value: 'piter' }
 				]}
 				placeholder="Город..."
-				onChange={(event) => setFilter(event, 'location')}
+				onChange={(event) => setFilter(event, 'area')}
 				value={valueCity}
 			/>
 			<SelectMenu
@@ -190,7 +190,7 @@ const TableVacation = ( { sort } ) => {
 		<StyledTableBlock>
 			<Table variant="minimal">
 				<Table.Body>
-					{sort.map(({id, title, status, department, location}) => {
+					{sort.map(({id, title, status, department, area}) => {
 						let carrentTextStatus: string;
 						let colorText;
 						switch(status) {
@@ -230,7 +230,7 @@ const TableVacation = ( { sort } ) => {
 									fontWeight='normal;font-size: 16px;line-height: 24px'
 									color='#12112F'
 									>
-										{`${location}, ${department}`}</Table.Cell>
+										{`${area}, ${department}`}</Table.Cell>
 								<Table.Cell 
 									textAlign="right"
 									>
