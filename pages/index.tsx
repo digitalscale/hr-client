@@ -96,7 +96,7 @@ const StyledStatusText = style.div`
 	color: ${props => props.color}
 `
 
-const Filter = ({ changeFilter }) => {
+const Filter = ({ changeFilter, data}) => {
 	const [valueVacanci, setValueVacanci] = useState('');
 	const [valueCity, setValueCity] = useState('');
 	const [valueStatus, serValueStatus] = useState('');
@@ -126,19 +126,40 @@ const Filter = ({ changeFilter }) => {
 		changeFilter({[key]: e.label});
 	}
 
+	const titleArray = data.reduce((acc, item) => {
+		const arr = acc;
+		if(!arr.includes(item.title)) {
+			arr.push(item.title)
+		}
+		return arr
+	}, []);
+
+	const areaArray = data.reduce((acc, item) => {
+		const arr = acc;
+		if(!arr.includes(item.area)) {
+			arr.push(item.area)
+		}
+		return arr
+	}, []);
+
+	const statusArray = data.reduce((acc, item) => {
+		const arr = acc;
+		if(!arr.includes(item.status)) {
+			arr.push(item.status)
+		}
+		return arr
+	}, []);
+
+	console.log(statusArray)
+
+	
 	return(
 		<StyledFilterField>
 			<SelectMenu
 				width='50%'
 				marginRight='12px'
 				hasSearch
-				options={[
-					{ key: 1, label: 'React-разработчик', value: 'react' },
-					{ key: 2, label: 'Solution-архитектор', value: 'solution' },
-					{ key: 3, label: 'Golang-разработчик', value: 'go' },
-					{ key: 4, label: 'Python-разработчик', value: 'python' },
-					{ key: 4, label: 'Python-разработчик', value: 'python' }
-				]}
+				options={titleArray.map((item, i) => {return { key: i, label: item, value: item }})}
 				placeholder="Название вакансии..."
 				onChange={(event) => setFilter(event, 'title')}
 				value={valueVacanci}
@@ -147,12 +168,7 @@ const Filter = ({ changeFilter }) => {
 				hasSearch
 				width='25%'
 				marginRight='12px'
-				options={[
-					{ key: 1, label: 'Москва', value: 'moscow' },
-					{ key: 2, label: 'Ростов-на-Дону', value: 'rostov' },
-					{ key: 3, label: 'Рязань', value: 'razan' },
-					{ key: 4, label: 'Санкт-Петербург', value: 'piter' }
-				]}
+				options={areaArray.map((item, i) => { return { key: 1, label: item, value: item }})}
 				placeholder="Город..."
 				onChange={(event) => setFilter(event, 'area')}
 				value={valueCity}
@@ -160,12 +176,8 @@ const Filter = ({ changeFilter }) => {
 			<SelectMenu
 				hasSearch
 				width='25%'
-				options={[
-					{ key: 1, label: 'Активно', value: 'activ' },
-					{ key: 2, label: 'Закрыто', value: 'inactive' },
-					{ key: 3, label: 'Приостановлено', value: 'draft' }
-				]}
-				placeholder="Стутус..."
+				options={statusArray.map((item, i) => {return { key: i, label: item, value: item }})}
+				placeholder="Статус..."
 				onChange={(event) => setFilter(event, 'status')}
 				value={valueStatus}
 			/>
@@ -230,7 +242,7 @@ const TableVacation = ( { sort } ) => {
 									fontWeight='normal;font-size: 16px;line-height: 24px'
 									color='#12112F'
 									>
-										{`${area}, ${department}`}</Table.Cell>
+										{`${area} ${department}`}</Table.Cell>
 								<Table.Cell 
 									textAlign="right"
 									>
@@ -244,7 +256,8 @@ const TableVacation = ( { sort } ) => {
 	)
 }
 
-const Index = () => {
+
+const Index = ( {mock}) => {
 
 	const [currentFilter, setCurrentStatus] = useState({});
 
@@ -262,7 +275,9 @@ const Index = () => {
 			break
 	}
 
-	const filteredArray = mock.filter(item => item[Object.keys(currentFilter)[0]] == currentLabel);
+	const arrayForFilter = mock.items;
+
+	const filteredArray = arrayForFilter.filter(item => item[Object.keys(currentFilter)[0]] == currentLabel);
 
 	function changeFilter(filter) {
 		setCurrentStatus(filter)
@@ -271,10 +286,17 @@ const Index = () => {
 	return (
 			<div>
 				<Head />
-				<Filter changeFilter={changeFilter} />
+				<Filter changeFilter={changeFilter} data={mock.items}/>
 				<TableVacation sort={filteredArray} />
 			</div>
 		);
 }
+
+Index.getInitialProps = async () => {
+	const res = await fetch('http://192.168.12.166:8080/vacancies')
+	const json = await res.json()
+	return { mock: json }
+}
+
 
 export default Index;
