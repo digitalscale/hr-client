@@ -189,6 +189,7 @@ const SecondBlockDescription = () => {
     return(
         <StyledSecondBlockDescription>
             <h3>Опыт</h3>
+            
         </StyledSecondBlockDescription>
     )
 };
