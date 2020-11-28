@@ -83,6 +83,13 @@ const StyledFilterField = style.div`
 
 const StyledTableBlock = style.div`
 	margin-top: 80px;
+
+	.titleJob {
+		color: #12112F
+	}
+	.titleJob:hover {
+		color: #5454E2
+	}
 `
 
 const StyledStatusText = style.div`
@@ -170,7 +177,10 @@ const Head = () => {
 	return (
 		<StyledHeadComponents >
 			<h1>Вакансии</h1>
-			<Button palette="primary">+ Создать</Button>
+			<Link href='/new
+			'>
+				<Button palette="primary">+ Создать</Button>
+			</Link>
 		</StyledHeadComponents>
 	)
 };
@@ -181,49 +191,52 @@ const TableVacation = ( { sort } ) => {
 			<Table variant="minimal">
 				<Table.Body>
 					{sort.map(({id, title, status, department, location}) => {
-					let carrentTextStatus: string;
-					let colorText;
-					switch(status) {
-						case 'active':
-							carrentTextStatus = 'Активно'
-							colorText = '#27AE60'
-							break
-						case 'inactive': 
-							carrentTextStatus = 'Закрыто'
-							colorText = '#27313F'
-							break
-						case 'draft':
-							carrentTextStatus = 'Приостановлено'
-							colorText = '#27313F'
-					}
+						let carrentTextStatus: string;
+						let colorText;
+						switch(status) {
+							case 'active':
+								carrentTextStatus = 'Активно'
+								colorText = '#27AE60'
+								break
+							case 'inactive': 
+								carrentTextStatus = 'Закрыто'
+								colorText = '#27313F'
+								break
+							case 'draft':
+								carrentTextStatus = 'Приостановлено'
+								colorText = '#27313F'
+						}
 					return (
-						<Table.Row 
-							key={id} 
-							borderBottom="1px solid #E0E4EA"
-							>
-							<Table.Cell
-								padding="32px 0px 24px 0px"
-								fontFamily='Verdana'
-								fontStyle='normal'
-								fontWeight='bold'
-								fontSize='20px'
-								lineHeight='26px'
-								color='#12112F'
-							>
-								{title}</Table.Cell>
-							<Table.Cell 
-								textAlign='left'
-								fontFamily='Verdana'
-								fontStyle='normal'
-								fontWeight='normal;font-size: 16px;line-height: 24px'
-								color='#12112F'
+						<Link href={`/vacancy/${id}`} >
+							<Table.Row 
+								key={id} 
+								borderBottom="1px solid #E0E4EA"
+								cursor='pointer'
 								>
-									{`${location}, ${department}`}</Table.Cell>
-							<Table.Cell 
-								textAlign="right"
+								<Table.Cell
+									padding="32px 0px 24px 0px"
+									fontFamily='Verdana'
+									fontStyle='normal'
+									fontWeight='bold'
+									fontSize='20px'
+									lineHeight='26px'
+									className='titleJob'
 								>
-									<StyledStatusText color={colorText}>{carrentTextStatus}</StyledStatusText></Table.Cell>
-						</Table.Row>
+									{title}</Table.Cell>
+								<Table.Cell 
+									textAlign='left'
+									fontFamily='Verdana'
+									fontStyle='normal'
+									fontWeight='normal;font-size: 16px;line-height: 24px'
+									color='#12112F'
+									>
+										{`${location}, ${department}`}</Table.Cell>
+								<Table.Cell 
+									textAlign="right"
+									>
+										<StyledStatusText color={colorText}>{carrentTextStatus}</StyledStatusText></Table.Cell>
+							</Table.Row>
+						</Link>
 					)})}
 				</Table.Body>
 				</Table>
