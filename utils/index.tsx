@@ -5,3 +5,19 @@ export const vacancies = [
     { key: 4, label: 'Python разработчик', value: 'python' }
     { key: 4, label: 'Python разработчик', value: 'python' }
 ]
+
+export type VacancyStatus = "active" | "inactive" | "draft"; 
+
+export interface VacancyShort {
+    id: string;
+    title: string;
+    status: VacancyStatus;
+    location?: string;
+    department?: string;
+    created: number;
+    updated: number;
+}
+export interface ListVanciesResponse {
+    items: [VacancyShort];
+    token?: string;
+}
