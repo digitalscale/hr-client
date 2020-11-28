@@ -10,18 +10,54 @@ const mock = [
 		title: 'React-разработчик',
 		status: 'active',
 		location: 'Москва',
-		department: '',
-		created: 25,
-		updated: 26
+		department: 'отдел комуникации',
+		created: '25',
+		updated: '26'
 	},
 	{
 		id: '3423432424',
 		title: 'Golang-разработчик',
 		status: 'active',
 		location: 'Ростов-на-Дону',
-		department: '',
-		created: 25,
-		updated: 26
+		department: 'маркетинговая платформа',
+		created: '25',
+		updated: '26'
+	},
+	{
+		id: '3423432424',
+		title: 'Golang-разработчик',
+		status: 'inactive',
+		location: 'Рязань',
+		department: 'маркетинговая платформа',
+		created: '25',
+		updated: '26'
+	},
+	{
+		id: '3423432424',
+		title: 'Golang-разработчик',
+		status: 'inactive',
+		location: 'Москва',
+		department: 'внутренние проекты',
+		created: '25',
+		updated: '26'
+	},
+	{
+		id: '3423432424',
+		title: 'Golang-разработчик',
+		status: 'inactive',
+		location: 'Казань',
+		department: 'отдел комуникации',
+		created: '25',
+		updated: '26'
+	},
+	{
+		id: '3423432424',
+		title: 'Golang-разработчик',
+		status: 'inactive',
+		location: 'Санкт-Петербург',
+		department: 'отдел разработки',
+		created: '25',
+		updated: '26'
 	}
 ];		
 
@@ -49,10 +85,39 @@ const StyledTableBlock = style.div`
 	margin-top: 80px;
 `
 
-const Filter = () => {
-	const [valueVacanci, setValueVacanci] = useState();
-	const [valueCity, setValueCity] = useState();
-	const [valueStatus, serValueStatus] = useState();
+const StyledStatusText = style.div`
+	color: ${props => props.color}
+`
+
+const Filter = ({ changeFilter }) => {
+	const [valueVacanci, setValueVacanci] = useState('');
+	const [valueCity, setValueCity] = useState('');
+	const [valueStatus, serValueStatus] = useState('');
+
+	function setFilter(e: any, type: string) {
+		let key: string;
+		switch(type) {
+			case 'title':
+				key = 'title';
+				setValueVacanci(e);
+				setValueCity('');
+				serValueStatus('');
+				break
+			case 'location':
+				key = 'location';
+				setValueCity(e);
+				setValueVacanci('');
+				serValueStatus('');
+				break
+			case 'status':
+				key = 'status';
+				serValueStatus(e);
+				setValueVacanci('');
+				setValueCity('');
+				break
+		}
+		changeFilter({[key]: e.label});
+	}
 
 	return(
 		<StyledFilterField>
@@ -61,14 +126,14 @@ const Filter = () => {
 				marginRight='12px'
 				hasSearch
 				options={[
-					{ key: 1, label: 'React разработчик', value: 'react' },
-					{ key: 2, label: 'Solution архитектор', value: 'solution' },
-					{ key: 3, label: 'Go разработчик', value: 'go' },
-					{ key: 4, label: 'Python разработчик', value: 'python' },
-					{ key: 4, label: 'Python разработчик', value: 'python' }
+					{ key: 1, label: 'React-разработчик', value: 'react' },
+					{ key: 2, label: 'Solution-архитектор', value: 'solution' },
+					{ key: 3, label: 'Golang-разработчик', value: 'go' },
+					{ key: 4, label: 'Python-разработчик', value: 'python' },
+					{ key: 4, label: 'Python-разработчик', value: 'python' }
 				]}
 				placeholder="Название вакансии..."
-				onChange={setValueVacanci}
+				onChange={(event) => setFilter(event, 'title')}
 				value={valueVacanci}
 			/>
 			<SelectMenu
@@ -82,7 +147,7 @@ const Filter = () => {
 					{ key: 4, label: 'Санкт-Петербург', value: 'piter' }
 				]}
 				placeholder="Город..."
-				onChange={setValueCity}
+				onChange={(event) => setFilter(event, 'location')}
 				value={valueCity}
 			/>
 			<SelectMenu
@@ -90,12 +155,11 @@ const Filter = () => {
 				width='25%'
 				options={[
 					{ key: 1, label: 'Активно', value: 'activ' },
-					{ key: 2, label: 'Активно', value: 'activ' },
-					{ key: 3, label: 'Активно', value: 'activ' },
-					{ key: 4, label: 'Активно', value: 'activ' }
+					{ key: 2, label: 'Закрыто', value: 'inactive' },
+					{ key: 3, label: 'Приостановлено', value: 'draft' }
 				]}
 				placeholder="Стутус..."
-				onChange={serValueStatus}
+				onChange={(event) => setFilter(event, 'status')}
 				value={valueStatus}
 			/>
 		</StyledFilterField>
@@ -111,28 +175,54 @@ const Head = () => {
 	)
 };
 
-const TableVacation = () => {
+const TableVacation = ( { sort } ) => {
 	return(
 		<StyledTableBlock>
 			<Table variant="minimal">
 				<Table.Body>
-					{mock.map(({id, title, status, location}) => {
-					let carrentTextStatus;
+					{sort.map(({id, title, status, department, location}) => {
+					let carrentTextStatus: string;
+					let colorText;
 					switch(status) {
 						case 'active':
 							carrentTextStatus = 'Активно'
+							colorText = '#27AE60'
 							break
 						case 'inactive': 
-							carrentTextStatus = 'Не активно'
+							carrentTextStatus = 'Закрыто'
+							colorText = '#27313F'
 							break
 						case 'draft':
-							carrentTextStatus = 'Черновик'
+							carrentTextStatus = 'Приостановлено'
+							colorText = '#27313F'
 					}
 					return (
-						<Table.Row key={id} borderBottom="1px solid #E0E4EA">
-							<Table.Cell>{title}</Table.Cell>
-							<Table.Cell>{location}</Table.Cell>
-							<Table.Cell>{carrentTextStatus}</Table.Cell>
+						<Table.Row 
+							key={id} 
+							borderBottom="1px solid #E0E4EA"
+							>
+							<Table.Cell
+								padding="32px 0px 24px 0px"
+								fontFamily='Verdana'
+								fontStyle='normal'
+								fontWeight='bold'
+								fontSize='20px'
+								lineHeight='26px'
+								color='#12112F'
+							>
+								{title}</Table.Cell>
+							<Table.Cell 
+								textAlign='left'
+								fontFamily='Verdana'
+								fontStyle='normal'
+								fontWeight='normal;font-size: 16px;line-height: 24px'
+								color='#12112F'
+								>
+									{`${location}, ${department}`}</Table.Cell>
+							<Table.Cell 
+								textAlign="right"
+								>
+									<StyledStatusText color={colorText}>{carrentTextStatus}</StyledStatusText></Table.Cell>
 						</Table.Row>
 					)})}
 				</Table.Body>
@@ -142,11 +232,34 @@ const TableVacation = () => {
 }
 
 const Index = () => {
+
+	const [currentFilter, setCurrentStatus] = useState({});
+
+	let currentLabel = currentFilter[Object.keys(currentFilter)[0]];
+
+	switch(currentLabel) {
+		case 'Активно':
+			currentLabel = 'active'
+			break
+		case 'Закрыто': 
+			currentLabel = 'inactive'
+			break
+		case 'Приостановлено': 
+			currentLabel = 'draft'
+			break
+	}
+
+	const filteredArray = mock.filter(item => item[Object.keys(currentFilter)[0]] == currentLabel);
+
+	function changeFilter(filter) {
+		setCurrentStatus(filter)
+	}
+
 	return (
 			<div>
 				<Head />
-				<Filter />
-				<TableVacation />
+				<Filter changeFilter={changeFilter} />
+				<TableVacation sort={filteredArray} />
 			</div>
 		);
 }
