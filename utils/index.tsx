@@ -6,6 +6,9 @@ export const vacancies = [
     { key: 4, label: 'Java разработчик', value: 'java' }
 ]
 
+
+
+
 export type VacancyStatus = "active" | "inactive" | "draft"; 
 
 export interface VacancyShort {
