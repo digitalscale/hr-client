@@ -276,7 +276,7 @@ const Main = () => {
   const [currentFilter, setCurrentStatus] = useState({});
   useEffect(() => {
     const url = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
-    const res = fetch(`/api/vacancies`)
+    const res = fetch(`https://gazprom.messa.dev/api/v1/vacancies`)
       .then((r) => r.json())
       .then((r) => {
         setState({ loading: false, mock: r });
