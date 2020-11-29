@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import style from 'styled-components';
-import { Tabs } from 'bumbag';
+import { Tabs, SelectMenu } from 'bumbag';
 import Tags from "../../components/Tags";
 import Link from "next/link";
 
@@ -16,8 +16,22 @@ const mock = {
     birthDate: '14 апреля 1993',    
     area: 'Mосква',         
     salary: '220000₽',         
-    educationLevel: [],
+    educationLevel: [
+        'Medium',
+        'Elementary',
+        'Hard'
+    ],
     education: [
+        {
+            title: 'НИЯУ МИФИ “Автоматика и электроника физических установок”',
+            year: '2019'
+        },
+        {
+            title: 'НИЯУ МИФИ “Автоматика и электроника физических установок”',
+            year: '2017'
+        }
+    ],    
+    experience: [
         {
             title: 'ООО “Кодикс”',
             description: 'НИЯУ МИФИ “Автоматика и электроника физических установок”',
@@ -26,15 +40,28 @@ const mock = {
         },
         {
             title: 'ООО “ФИГМА”',
-            start: '19.04.2018'
+            description: null,
+            start: '19.04.2018',
+            end: null
         }
-    ],    
-    experience: [],
-    languages: [],       
+    ],
+    languages: [
+        'Англиский',
+        'Японский',
+        'Болгарский'
+    ],       
     skills: ['React', 'JavaScript', 'Node.js'],      
     create: 'time',    
     updated: 'time'      
 }
+
+const mockRightPanel = [
+    {title: 'Автоматическая оценка', score: 3},
+    {title: 'Оценка hr-специалиста', score: 4},
+    {title: 'Оценка Антона Бармина', score: 5},
+    {title: 'Оценка Сергея Матвейкина', score: 2},
+    {title: 'Оценка Романа Рытикова', score: 1},
+];
 
 const StyledPageEmployees = style.div`
     display: flex;
@@ -43,7 +70,8 @@ const StyledPageEmployees = style.div`
 
 
 const StyledBodySelectDescription = style.div`
-    width: 80%;
+    width: 75%;
+    margin-right:60px;
 `
 
 const StyledFirstBlockDescription = style.div`
@@ -144,10 +172,6 @@ const StyledFirstBlockDescription = style.div`
     }
 `
 
-const StyledLeftPanel = style.div`
-    width: 20%;
-`
-
 const StyledSecondBlockDescription = style.div`
     margin-top: 48px;
     h3 {
@@ -157,6 +181,35 @@ const StyledSecondBlockDescription = style.div`
         font-size: 24px;
         line-height: 32px;
         color: #12112F;
+    }
+
+    .jobDate {
+        font-family: Verdana;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 17px;
+        line-height: 22px;
+        color: #12112F;
+        margin:0;
+    }
+
+    .jobTitle {
+        margin-top: 8px;
+    }
+
+    .jobDescription {
+        font-family: Verdana;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 24px;
+        color: #12112F;
+
+        margin-top: 20px;
+    }
+
+    .blockJob {
+        margin-bottom: 40px;
     }
 `
 
@@ -185,12 +238,102 @@ const FirstBlockDescription = ({name, phone, email, specialization, salary, gend
     )
 };
 
-const SecondBlockDescription = () => {
+const SecondBlockDescription = ({experience}) => {
     return(
         <StyledSecondBlockDescription>
             <h3>Опыт</h3>
-            
+            {experience.map(item => (
+                <div className='blockJob'>
+                    <h5 className='jobDate'>C {item.start} 
+                        {item.end != null && ` по ${item.end}`}
+                        {item.end == null && ` по настоящее время`}
+                    </h5>
+                    <div className="jobTitle">{item.title}</div>
+                    {item.description != null && <div className='jobDescription'>{item.description}</div>}
+                </div>
+            ))}
         </StyledSecondBlockDescription>
+    )
+};
+
+const StyledThirdBlockDescription = style.div`
+    h3 {
+        margin-top: 44px;
+        font-family: Verdana;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 24px;
+        line-height: 32px;
+        color: #12112F;
+    }
+
+    .educationYear {
+        font-family: Verdana;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 17px;
+        line-height: 22px;
+        color: #12112F;
+    }
+
+    .educationTitle {
+        font-family: Verdana;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 24px;
+        color: #12112F;
+
+        margin-top: 8px;
+    }
+
+    .blockEducation {
+        margin-top: 24px;
+    }
+`
+
+const ThirdBlockDescription = ({ education } ) => {
+    return(
+        <StyledThirdBlockDescription>
+            <h3>Обучение</h3>
+            {education.map(item => (
+                <div className="blockEducation">
+                    <div className="educationYear">{item.year}</div>
+                    <div className="educationTitle">{item.title}</div>
+                </div>
+            ))}
+        </StyledThirdBlockDescription>
+    )
+};
+
+const StyledFourthBlockDescription = style.div`
+    h3 {
+        margin-top: 44px;
+        font-family: Verdana;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 24px;
+        line-height: 32px;
+        color: #12112F;
+    }
+
+    .blockLanguages {
+        display: flex;
+    }
+`
+
+const FourthBlockDescription = ({languages, educationLevel}) => {
+    return(
+        <StyledFourthBlockDescription>
+            <h3>Языки</h3>
+            {languages.map((item, i) => (
+                <div className='blockLanguages'>
+                    {item} {
+                        !!educationLevel[i] && <div>{`(${educationLevel[i]})`}</div>
+                    }
+                </div>
+            ))}
+        </StyledFourthBlockDescription>
     )
 };
 
@@ -216,15 +359,118 @@ const BodySelectDescription = ( { info } ) => {
                 birthDate={info.birthDate}
                 area={info.area}
             />
-            <SecondBlockDescription />
+            <SecondBlockDescription experience={info.experience} />
+            <ThirdBlockDescription education={info.education} />
+            <FourthBlockDescription languages={info.languages} educationLevel={info.educationLevel} />
         </StyledBodySelectDescription>
     )
 };
 
-const Rigthpanel = () => {
+const StyledLeftPanel = style.div`
+    width: 25%;
+    margin-top: 64px;
+
+    .buttonChangeRespons {
+        font-family: Verdana;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 18px;
+        color: #5454E2;
+
+        margin-top: 20px;
+        border: none; 
+        outline: none;
+        background: none;
+        text-align: center;
+        width: 100%;
+
+        cursor: pointer;
+        margin-bottom: 56px;
+    }
+
+    .fieldWithScore {
+        div {
+            display: flex;
+            justify-content: start;
+        }
+        border-bottom: 1px solid #E0E0E0;
+    }
+
+    .leftPanelTitle {
+        margin-top: 20px;
+        font-family: Verdana;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 10px;
+        line-height: 14px;
+        color: #12112F;
+    }
+
+    .leftPanelScore {
+        margin: 4px 0px 20px 0px;
+        font-family: Verdana;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 17px;
+        line-height: 22px;
+    }
+`
+
+const StyledColorScore = style.div`
+    color: ${props => props.color}
+`
+
+const Rigthpanel = ({ info }) => {
+
+    const [value, setValue] = React.useState();
+
+    const dataRow = [
+        { key: 1, label: 'Отклик', value: 'Отклик' },
+        { key: 2, label: 'Интервью с HR', value: 'Интервью с HR' },
+        { key: 3, label: 'Тестовое задание', value: 'Тестовое задание' },
+        { key: 4, label: 'Техническое интервью', value: 'Техническое интервью' },
+        { key: 4, label: 'Согласование оффера', value: 'Согласование оффера' },
+        { key: 4, label: 'Анкета СБ', value: 'Анкета СБ' },
+        { key: 4, label: 'Оффер', value: 'Оффер' },
+        { key: 4, label: 'Предложение принято', value: 'Предложение принято' },
+        { key: 1, label: 'Вышел на работу', value: 'Вышел на работу' },
+        { key: 1, label: 'Испытательный срок пройден', value: 'Испытательный срок пройден' },
+        { key: 1, label: 'Отказ', value: 'Отказ' },
+    ];
+
+    const sortSorce = info.map(item => {
+        switch(item.score) {
+            case 1: return {text: 'Однозначно нет', color: '#C83227'}
+            case 2: return {text: 'Слабо', color: '#E19F41'}
+            case 3: return {text: 'Рассмотреть подробнее', color: '#E19F41'}
+            case 4: return {text: 'Наиболее подходящий', color: '#62AE82'}
+            case 5: return {text: 'Супер-кандидат', color: '#27AE60'}
+        }
+    });
+
     return(
         <StyledLeftPanel>
-            test2
+            <div>
+                <SelectMenu
+                    onChange={setValue}
+                    options={dataRow}
+                    placeholder="Выбирите процесс"
+                    value={value}
+                    cursor='pointer'
+                />
+                <button className="buttonChangeRespons">
+                    Изменить свою оценку
+                </button>
+                {info.map((item, i) => (
+                    <div className='fieldWithScore'>
+                        <div className="leftPanelTitle">{item.title}</div>
+                <div className="leftPanelScore">{
+                    <StyledColorScore color={sortSorce[i].color}>{sortSorce[i].text}</StyledColorScore>
+                    }</div>
+                    </div>
+                ))}
+            </div>
         </StyledLeftPanel>
     )
 };
@@ -239,7 +485,7 @@ const PageEmployees = () => {
             <Tabs.Panel tabId="tab1" padding="major-2">
                 <StyledPageEmployees >
                     <BodySelectDescription info={mock}/>
-                    <Rigthpanel/>
+                    <Rigthpanel info={mockRightPanel}/>
                 </StyledPageEmployees>
             </Tabs.Panel>
             <Tabs.Panel tabId="tab2" padding="major-2">
