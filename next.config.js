@@ -6,4 +6,12 @@ module.exports = {
       // !! WARN !!
       ignoreBuildErrors: true,
     },
+    async rewrites() {
+      return [
+        {
+          source: '/api/:path*',
+          destination: 'http://192.168.12.166:8080/:path*',
+        },
+      ]
+    },
   }

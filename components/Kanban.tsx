@@ -2,14 +2,15 @@ import React from "react";
 import Board from "react-trello";
 import styled from "styled-components";
 import Link from "next/link";
-
+import { Box } from "bumbag";
 
 const Wrapper = styled.div`
- .react-trello-board{
-     background: white;
- }
-
-`
+  overflow: scroll;
+  width: 100%;
+  .react-trello-board {
+    background: white;
+  }
+`;
 
 const data = {
   lanes: [
@@ -21,15 +22,17 @@ const data = {
           title: "Матвейкин Сергей",
           description: "Frontend Dev",
           laneId: "749114c0-314d-11eb-bfe1-2bcaa783a21c",
-          tags: [{bgcolor: "green", color: "white", title: "Наиболее подходящий"}]
+          tags: [
+            { bgcolor: "green", color: "white", title: "Наиболее подходящий" },
+          ],
         },
         {
-            id: "fd2deba0-314d-11eb-bfe1-2bcwa783a21c",
-            title: "Осипов Иван",
-            description: "Frontend Dev",
-            laneId: "749114c0-314d-11eb-bfe1-2bcaa783a21c",
-            tags: [{bgcolor: "red", color: "white", title: "Однозначно нет"}]
-          },
+          id: "fd2deba0-314d-11eb-bfe1-2bcwa783a21c",
+          title: "Осипов Иван",
+          description: "Frontend Dev",
+          laneId: "749114c0-314d-11eb-bfe1-2bcaa783a21c",
+          tags: [{ bgcolor: "red", color: "white", title: "Однозначно нет" }],
+        },
       ],
       title: "Отклик",
     },
@@ -40,22 +43,22 @@ const data = {
           id: "05742540-314e-11eb-bfe1-2bcaa783a21c",
           title: "Евгений Солнцев",
           description: "Дизайнер",
-        
+
           laneId: "7ad6c370-314d-11eb-bfe1-2bcaa783a21c",
         },
         {
-            id: "05742540-314e-11eb-bfe1-2bcaa7m3a21c",
-            title: "Роман Рытиков",
-            description: "QA",
-            laneId: "7ad6c370-314d-11eb-bfe1-2bcaa783a21c",
-          },
-          {
-            id: "05742540-314e-112b-bfe1-2bcaa783a21c",
-            title: "Антон Бармин",
-            description: "Solution Architecter",
+          id: "05742540-314e-11eb-bfe1-2bcaa7m3a21c",
+          title: "Роман Рытиков",
+          description: "QA",
+          laneId: "7ad6c370-314d-11eb-bfe1-2bcaa783a21c",
+        },
+        {
+          id: "05742540-314e-112b-bfe1-2bcaa783a21c",
+          title: "Антон Бармин",
+          description: "Solution Architecter",
 
-            laneId: "7ad6c370-314d-11eb-bfe1-2bcaa783a21c",
-          },
+          laneId: "7ad6c370-314d-11eb-bfe1-2bcaa783a21c",
+        },
       ],
       title: "Интервью с HR",
     },
@@ -116,7 +119,9 @@ const data = {
 const Index = () => {
   return (
     <Wrapper>
-      <Board canAddLanes onChange={console.log} data={data} />
+      <Box>
+        <Board canAddLanes onChange={console.log} data={data} />
+      </Box>
     </Wrapper>
   );
 };

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Box, PageWithHeader } from 'bumbag';
+import { ToastManager, useToasts } from 'bumbag'
 import Head from "next/head";
 import { Provider as BumbagProvider, css } from "bumbag";
 import { ApolloProvider } from "@apollo/client";
@@ -57,6 +58,7 @@ export default function App({ Component, pageProps }: Props) {
         </Box>
 
         <GlobalStyle />
+        <ToastManager />
       </PageWithHeader>
 
     </BumbagProvider>

@@ -1,10 +1,11 @@
 import { Flex, Heading, SelectMenu, Card, Divider } from "bumbag";
 import React from "react";
-import { Input, InputField, Link, Text, Box, Button } from "bumbag";
+import { Input, InputField, Link, Text, Box, Button,useToasts  } from "bumbag";
 import Tags from "../components/Tags";
 import { vacancies, experiencies, gbpDescription } from "../utils";
 import { group } from "console";
 
+import { useRouter } from 'next/router'
 
 const grades = [
   { key: 1, label: "1 грейд", value: "busines" },
@@ -22,6 +23,19 @@ const grades = [
 export const departments = [
   { key: 1, label: "Управления бизнес-процессами", value: "busines" },
   { key: 2, label: "Инноваций", value: "solution" },
+];
+
+export const templates = [
+  {
+    key: 1,
+    label: "Молодежный",
+    value: "8548c5f6-6feb-48c7-8c26-1c3aea31dad3",
+  },
+  {
+    key: 2,
+    label: "Консервативный",
+    value: "8117241c-3074-45de-ab71-5d334da1c0bb",
+  },
 ];
 
 export const groups = [
@@ -45,17 +59,18 @@ export const groups = [
 const groupsDescription = {
   inovation:
     "Мы разрабатываем, внедряем и поддерживаем платформу и решения по управлению бизнес-процессами компании от заказа командировок до управления целями и бизнес-инициативами. У нас в команде есть эксперты по поддержке платформы и приложений и нам очень не хватает разработчиков.",
-  micro: "Мы разрабатываем, внедряем и поддерживаем платформу и решения по управлению бизнес-процессами компании от заказа командировок до управления целями и бизнес-инициативами. У нас в команде есть эксперты по поддержке платформы и приложений и нам очень не хватает разработчиков.",
-  front: "Мы разрабатываем, внедряем и поддерживаем платформу и решения по управлению бизнес-процессами компании от заказа командировок до управления целями и бизнес-инициативами. У нас в команде есть эксперты по поддержке платформы и приложений и нам очень не хватает разработчиков.",
+  micro:
+    "Мы разрабатываем, внедряем и поддерживаем платформу и решения по управлению бизнес-процессами компании от заказа командировок до управления целями и бизнес-инициативами. У нас в команде есть эксперты по поддержке платформы и приложений и нам очень не хватает разработчиков.",
+  front:
+    "Мы разрабатываем, внедряем и поддерживаем платформу и решения по управлению бизнес-процессами компании от заказа командировок до управления целями и бизнес-инициативами. У нас в команде есть эксперты по поддержке платформы и приложений и нам очень не хватает разработчиков.",
 };
 
-
 const Section = ({ children, title }) => (
-  <Flex marginBottom="40px" flexDirection="column">
+  <Flex marginBottom="64px" flexDirection="column">
     {title && (
       <Flex justifyContent="space-between">
         {" "}
-        <Heading use="h4" marginBottom="50px">
+        <Heading use="h4" marginBottom="24px">
           {title}
         </Heading>
         <Link>По умолчанию</Link>
@@ -64,11 +79,6 @@ const Section = ({ children, title }) => (
     {children}
   </Flex>
 );
-
-interface Skill {
-  title: string;
-  important?: boolean;
-}
 
 interface Request {
   vacancy?: string;
@@ -82,27 +92,41 @@ interface Request {
   group: string;
 }
 
+export type VacancyStatus = "draft" | "active" | "inactive";
+
+export interface Skill {
+  title: string;
+  important: boolean;
+}
+
+export interface Vacancy {
+  id: string;
+  templateID: string;
+  title: string;
+  status: VacancyStatus;
+  area?: string;
+  department?: string;
+  skills: [Skill];
+  duties: [string];
+  requirements: [string];
+  experience?: number;
+  created: string;
+  updated: string;
+}
+
 const New = () => {
+  const router = useRouter()
+  const toasts = useToasts();
   const [vacancy, setVacancy] = React.useState();
-  const [departament, setDepartament] = React.useState();
+  const [department, setDepartment] = React.useState();
   const [group, setGroup] = React.useState();
-  const [template, setTemplate] = React.useState();
+  const [template, setTemplate] = React.useState(templates[0]);
   const [experience, setExperience] = React.useState();
   const [skills, setSkills] = React.useState([]);
   const [grade, setGrade] = React.useState();
   const [duties, setDuties] = React.useState<string[]>([""]);
   const [requirements, setRequirements] = React.useState<string[]>([""]);
-  console.log({
-    vacancy,
-    departament,
-    group,
-    template,
-    experience,
-    skills,
-    grade,
-    duties,
-    requirements,
-  });
+
   const filteredSkills = skills.map((i) => ({ ...i, active: false }));
 
   return (
@@ -110,7 +134,7 @@ const New = () => {
       <Flex flex="1 1 45%" flexDirection="column">
         <Heading use="h1" marginBottom="50px">
           Новая вакансия
-        </Heading>{" "}
+        </Heading>
         <Section>
           <SelectMenu
             hasSearch
@@ -120,14 +144,14 @@ const New = () => {
             value={vacancy}
             marginBottom="30px"
           />
-          <Flex marginBottom="30px">
+          <Flex>
             <SelectMenu
               flex="1 1 50%"
               hasSearch
-              onChange={setDepartament}
+              onChange={setDepartment}
               options={departments}
               placeholder="Департамент"
-              value={departament}
+              value={department}
               marginRight="20px"
             />
             <SelectMenu
@@ -236,8 +260,38 @@ const New = () => {
       </Flex>
       <Flex flex="1 1 10%" />
       <Flex flex="1 1 45%" alignItems="flex-end" flexDirection="column">
-        <Button palette="primary" marginBottom="35px">
-          {" "}
+        <Button
+          onClick={() => {
+
+            const data: Vacancy = {
+              templateID: template.value,
+              title: vacancy.label,
+              status: "active",
+              group: group.value,
+              department: department.label,
+              skills: skills.filter((i) => i.active),
+              duties,
+              requirements,
+              experience: experience.value,
+            };
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/vacancies`, {
+              method: "POST",
+              headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              body: JSON.stringify(data)
+            }).then((r)=>r.json()).then(()=>{
+              toasts.success({
+                title: 'Вакансия успешно сохранена',
+              })
+              router.push('/');
+            });
+          }}
+          palette="primary"
+          marginBottom="35px"
+          disabled={!template.value || !vacancy?.label || !duties[0] || !requirements[0] || !department?.label || !group?.value}
+        >
           Сохранить
         </Button>
         <Card
@@ -253,7 +307,7 @@ const New = () => {
               <SelectMenu
                 hasSearch
                 onChange={setTemplate}
-                options={vacancies}
+                options={templates}
                 placeholder="Шаблоны"
                 value={template}
               />
