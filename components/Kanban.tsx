@@ -20,7 +20,7 @@ const data = {
       cards: [
         {
           id: "fd2deba0-314d-11eb-bfe1-2bcaa783a21c",
-          title: "Матвейкин Сергей",
+          title: "Газпромоский Иван Алексеевич",
           description: "Frontend Dev",
           laneId: "749114c0-314d-11eb-bfe1-2bcaa783a21c",
           tags: [
