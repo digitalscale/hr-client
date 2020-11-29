@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import style from 'styled-components';
-import { Tabs, SelectMenu } from 'bumbag';
+import { Tabs, SelectMenu, Modal, Button, Card, Box} from 'bumbag';
 import Tags from "../../components/Tags";
 import Link from "next/link";
 
@@ -242,8 +242,8 @@ const SecondBlockDescription = ({experience}) => {
     return(
         <StyledSecondBlockDescription>
             <h3>Опыт</h3>
-            {experience.map(item => (
-                <div className='blockJob'>
+            {experience.map((item, i) => (
+                <div className='blockJob' key={+i + Math.floor(Math.random() * 1000)}>
                     <h5 className='jobDate'>C {item.start} 
                         {item.end != null && ` по ${item.end}`}
                         {item.end == null && ` по настоящее время`}
@@ -296,8 +296,8 @@ const ThirdBlockDescription = ({ education } ) => {
     return(
         <StyledThirdBlockDescription>
             <h3>Обучение</h3>
-            {education.map(item => (
-                <div className="blockEducation">
+            {education.map((item, i) => (
+                <div className="blockEducation" key={+i + Math.floor(Math.random() * 1000)}>
                     <div className="educationYear">{item.year}</div>
                     <div className="educationTitle">{item.title}</div>
                 </div>
@@ -327,7 +327,7 @@ const FourthBlockDescription = ({languages, educationLevel}) => {
         <StyledFourthBlockDescription>
             <h3>Языки</h3>
             {languages.map((item, i) => (
-                <div className='blockLanguages'>
+                <div className='blockLanguages' key={+i + Math.floor(Math.random() * 1000)}>
                     {item} {
                         !!educationLevel[i] && <div>{`(${educationLevel[i]})`}</div>
                     }
@@ -370,25 +370,6 @@ const StyledLeftPanel = style.div`
     width: 25%;
     margin-top: 64px;
 
-    .buttonChangeRespons {
-        font-family: Verdana;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 12px;
-        line-height: 18px;
-        color: #5454E2;
-
-        margin-top: 20px;
-        border: none; 
-        outline: none;
-        background: none;
-        text-align: center;
-        width: 100%;
-
-        cursor: pointer;
-        margin-bottom: 56px;
-    }
-
     .fieldWithScore {
         div {
             display: flex;
@@ -414,6 +395,12 @@ const StyledLeftPanel = style.div`
         font-weight: bold;
         font-size: 17px;
         line-height: 22px;
+    }
+
+    .buttonModal {
+        margin-top: 32px;
+        display: flex;
+        justify-content: right;
     }
 `
 
@@ -449,25 +436,86 @@ const Rigthpanel = ({ info }) => {
         }
     });
 
+    const scoreText = [
+        { key: 1, label: 'Однозначно нет', value: 'Однозначно нет' },
+        { key: 2, label: 'Слабо', value: 'Слабо' },
+        { key: 3, label: 'Рассмотреть подробнее', value: 'Рассмотреть подробнее' },
+        { key: 4, label: 'Наиболее подходящий', value: 'Наиболее подходящий' },
+        { key: 5, label: 'Супер-кандидат', value: 'Супер-кандидат' }
+    ]
+
     return(
         <StyledLeftPanel>
             <div>
                 <SelectMenu
                     onChange={setValue}
                     options={dataRow}
-                    placeholder="Выбирите процесс"
+                    placeholder="Выберите процесс"
                     value={value}
                     cursor='pointer'
                 />
-                <button className="buttonChangeRespons">
-                    Изменить свою оценку
-                </button>
+                <div>
+                    <Modal.State>
+                        <Modal.Disclosure 
+                            use={Button}
+                            border="none" 
+                            outline="none"
+                            background="none"
+                            margin="20px 0px 56px 0px"
+                            textAlign="center"
+                            fontFamily="Verdana"
+                            fontStyle="normal"
+                            fontWeight="normal"
+                            fontSize="12px"
+                            lineHeight="18px"
+                            color="#5454E2"
+                            borderRadius="none"
+                            boxShadow="none"
+                            width="100%"
+                        >
+                            Изменить свою оценку
+                        </Modal.Disclosure>
+                        <Modal>
+                            <Card 
+                                background="#323846" 
+                                borderRadius='8px'
+                                width="640px"
+                                height="265px"
+                            >
+                                <Box 
+                                    color="#E0E4EA"
+                                    fontFamily="Verdana"
+                                    fontStyle="normal"
+                                    fontWeight="500"
+                                    fontSize="24px"
+                                    lineHeight="27px"
+                                    margin="32px 200px 20px 32px"
+                                >
+                                    Изменить оценку кандидата
+                                </Box>
+                                <SelectMenu 
+                                    onChange={setValue}
+                                    options={scoreText}
+                                    placeholder="Рассмотреть подробнее"
+                                    value={value}
+                                    cursor='pointer'
+                                    width="465px"
+                                    margin="0px 0px 0px 32px"
+                                />
+                                <div className="buttonModal">
+                                    <Modal.Disclosure use={Button}>Отменить</Modal.Disclosure>
+                                    <Modal.Disclosure use={Button}>Отправить</Modal.Disclosure>
+                                </div>
+                            </Card>
+                        </Modal>
+                    </Modal.State>
+                </div>
                 {info.map((item, i) => (
-                    <div className='fieldWithScore'>
+                    <div className='fieldWithScore' key={+i + Math.floor(Math.random() * 1000)}>
                         <div className="leftPanelTitle">{item.title}</div>
-                <div className="leftPanelScore">{
-                    <StyledColorScore color={sortSorce[i].color}>{sortSorce[i].text}</StyledColorScore>
-                    }</div>
+                        <div className="leftPanelScore">{
+                            <StyledColorScore color={sortSorce[i].color}>{sortSorce[i].text}</StyledColorScore>
+                        }</div>
                     </div>
                 ))}
             </div>
@@ -489,7 +537,8 @@ const PageEmployees = () => {
                 </StyledPageEmployees>
             </Tabs.Panel>
             <Tabs.Panel tabId="tab2" padding="major-2">
-                Тут будут история действия
+                Ведутся работы
+                <img src="https://zebra-tv.ru/upload/iblock/e7e/Bober.jpg"/>
             </Tabs.Panel>
         </Tabs>
     )
