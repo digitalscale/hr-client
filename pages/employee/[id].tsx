@@ -1,10 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import style from 'styled-components';
 import { Tabs, SelectMenu, Modal, Button, Card, Box} from 'bumbag';
 import Tags from "../../components/Tags";
-import Link from "next/link";
-
-type Gender = "male" | "female"
 
 const mock = {
     id: '2234324234234',
@@ -410,7 +407,9 @@ const StyledColorScore = style.div`
 
 const Rigthpanel = ({ info }) => {
 
-    const [value, setValue] = React.useState();
+    const [value, setValue] = useState();
+    const [getHr, setGetHr] = useState();
+    const [currentInfo, setCurrentInfo] = useState(info);
 
     const dataRow = [
         { key: 1, label: 'Отклик', value: 'Отклик' },
@@ -426,7 +425,7 @@ const Rigthpanel = ({ info }) => {
         { key: 1, label: 'Отказ', value: 'Отказ' },
     ];
 
-    const sortSorce = info.map(item => {
+    const sortSorce = currentInfo.map(item => {
         switch(item.score) {
             case 1: return {text: 'Однозначно нет', color: '#C83227'}
             case 2: return {text: 'Слабо', color: '#E19F41'}
@@ -436,6 +435,8 @@ const Rigthpanel = ({ info }) => {
         }
     });
 
+    console.log(getHr)
+
     const scoreText = [
         { key: 1, label: 'Однозначно нет', value: 'Однозначно нет' },
         { key: 2, label: 'Слабо', value: 'Слабо' },
@@ -443,6 +444,12 @@ const Rigthpanel = ({ info }) => {
         { key: 4, label: 'Наиболее подходящий', value: 'Наиболее подходящий' },
         { key: 5, label: 'Супер-кандидат', value: 'Супер-кандидат' }
     ]
+
+    function handleHr (status) {
+        let array = currentInfo;
+        array[1] = { title: status.label, score: status.key }
+        setCurrentInfo(array);
+    }
 
     return(
         <StyledLeftPanel>
@@ -494,18 +501,28 @@ const Rigthpanel = ({ info }) => {
                                     Изменить оценку кандидата
                                 </Box>
                                 <SelectMenu 
-                                    onChange={setValue}
+                                    onChange={setGetHr}
                                     options={scoreText}
                                     placeholder="Рассмотреть подробнее"
-                                    value={value}
+                                    value={getHr}
                                     cursor='pointer'
                                     width="465px"
                                     margin="0px 0px 0px 32px"
                                 />
-                                <div className="buttonModal">
-                                    <Modal.Disclosure use={Button}>Отменить</Modal.Disclosure>
-                                    <Modal.Disclosure use={Button}>Отправить</Modal.Disclosure>
-                                </div>
+                                <Modal.Disclosure>
+                                    <Button 
+                                        variant="ghost" 
+                                        color="#FCFCFD"
+                                        margin="32px 31px 0px 182px"
+
+                                    >Отменить</Button>
+                                </Modal.Disclosure>
+                                <Modal.Disclosure>
+                                    <Button 
+                                        palette="primary"
+                                        onClick={() => handleHr(getHr)}
+                                    >Изменить отценку</Button>
+                                </Modal.Disclosure>
                             </Card>
                         </Modal>
                     </Modal.State>
