@@ -2,6 +2,7 @@ import React from "react";
 import Board from "react-trello";
 import styled from "styled-components";
 import Link from "next/link";
+import { useRouter } from 'next/router'
 import { Box } from "bumbag";
 
 const Wrapper = styled.div`
@@ -197,11 +198,17 @@ const data = {
 };
 
 const Index = () => {
+  const router = useRouter();
+  const handleClick = (e) => {
+    
+    router.push('/employee/1')
+  }
   return (
     <Wrapper>
       <Box>
         <Board
           canAddLanes
+          onCardClick={handleClick}
           handleDragEnd={(
             cardId,
             sourceLaneId,

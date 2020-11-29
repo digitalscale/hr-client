@@ -102,8 +102,8 @@ export default function slack(req, res) {
         headers: myHeaders,
         body: raw
     };
-
-    fetch("https://hooks.slack.com/services/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", requestOptions)
+    console.log(process.env.SLACK_HOOK_URL, 'HOOK URL')
+    fetch(process.env.SLACK_HOOK_URL, requestOptions)
         .then(response => response.text())
         .then(() => res.end(JSON.stringify({ status: 'ok' })))
         .catch(error => console.log('error', error));
