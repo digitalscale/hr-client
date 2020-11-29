@@ -15,7 +15,7 @@ const Wrapper = styled.div`
 const data = {
   lanes: [
     {
-      id: "749114c0-314d-11eb-bfe1-2bcaa783a21c",
+      id: "0",
       cards: [
         {
           id: "fd2deba0-314d-11eb-bfe1-2bcaa783a21c",
@@ -25,6 +25,86 @@ const data = {
           tags: [
             { bgcolor: "green", color: "white", title: "Наиболее подходящий" },
           ],
+        },
+        {
+          id: "fd1deba0-314d-11eb-bfe1-2bcaa783a21c",
+          title: "Чебурашкин Имануил",
+          description: "Frontend Dev",
+          laneId: "749114c0-314d-11eb-bfe1-2bcaa783a21c",
+          tags: [
+            { bgcolor: "green", color: "white", title: "Наиболее подходящий" },
+          ],
+        },
+        {
+          id: "fd1deb20-314d-11eb-bfe1-2bcaa783a21c",
+          title: "Киргизов Кирилл",
+          description: "Frontend Dev",
+          laneId: "749114c0-314d-11eb-bfe1-2bcaa783a21c",
+          tags: [{ bgcolor: "red", color: "white", title: "Однозначно нет" }],
+        },
+        {
+          id: "fd1deb20-3140-11eb-bfe1-2bcaa783a21c",
+          title: "Кривоухов Анатолий",
+          description: "Frontend Dev",
+          laneId: "749114c0-314d-11eb-bfe1-2bcaa783a21c",
+          tags: [
+            { bgcolor: "green", color: "white", title: "Наиболее подходящий" },
+          ],
+        },
+        {
+          id: "ad1d0b20-3140-11eb-bfe1-2bcaa783b21c",
+          title: "Зябликов Александр",
+          description: "Frontend Dev",
+          laneId: "749114c0-314d-11eb-bfe1-2bcaa783a21c",
+          tags: [{ bgcolor: "orange", color: "white", title: "Слабо" }],
+        },
+        {
+          id: "ff1d0b20-3199-11eb-bfe1-2bcaa783a21c",
+          title: "Тютюн Михаил",
+          description: "Frontend Dev",
+          laneId: "749114c0-314d-11eb-bfe1-2bcaa783a21c",
+          tags: [
+            { bgcolor: "green", color: "white", title: "Наиболее подходящий" },
+          ],
+        },
+        {
+          id: "5d1d0b20-3140-11eb-bfe1-2bcaa783a21c",
+          title: "Корочкин Алексей",
+          description: "Frontend Dev",
+          laneId: "749114c0-314d-11eb-bfe1-2bcaa783a21c",
+          tags: [
+            { bgcolor: "green", color: "white", title: "Наиболее подходящий" },
+          ],
+        },
+        {
+          id: "4d1d0b20-3140-11eb-bfe1-2bcaa783a21c",
+          title: "Плющев Алексей",
+          description: "Frontend Dev",
+          laneId: "749114c0-314d-11eb-bfe1-2bcaa783a21c",
+          tags: [
+            { bgcolor: "green", color: "white", title: "Наиболее подходящий" },
+          ],
+        },
+        {
+          id: "3d1d0b20-3140-11eb-bfe1-2bcaa783a21c",
+          title: "Корочкин Алексей",
+          description: "Frontend Dev",
+          laneId: "749114c0-314d-11eb-bfe1-2bcaa783a21c",
+          tags: [{ bgcolor: "orange", color: "white", title: "Слабо" }],
+        },
+        {
+          id: "2d1d0b20-3140-11eb-bfe1-2bcaa783a21c",
+          title: "Корочкин Алексей",
+          description: "Frontend Dev",
+          laneId: "749114c0-314d-11eb-bfe1-2bcaa783a21c",
+          tags: [{ bgcolor: "orange", color: "white", title: "Слабо" }],
+        },
+        {
+          id: "1d1d0b20-3140-11eb-bfe1-2bcaa783a21c",
+          title: "Корочкин Алексей",
+          description: "Frontend Dev",
+          laneId: "749114c0-314d-11eb-bfe1-2bcaa783a21c",
+          tags: [{ bgcolor: "orange", color: "white", title: "Слабо" }],
         },
         {
           id: "fd2deba0-314d-11eb-bfe1-2bcwa783a21c",
@@ -37,7 +117,7 @@ const data = {
       title: "Отклик",
     },
     {
-      id: "7ad6c370-314d-11eb-bfe1-2bcaa783g21c",
+      id: "1",
       cards: [
         {
           id: "05742540-314e-11eb-bfe1-2bcaa783a21c",
@@ -63,17 +143,17 @@ const data = {
       title: "Интервью с HR",
     },
     {
-      id: "7f9d7340-314d-11eb-bfe1-2bcaa783a21c",
+      id: "2",
       cards: [],
       title: "Тестовое задание",
     },
     {
-      id: "874c00c0-314d-11eb-bfe1-2bcaa783a21c",
+      id: "3",
       cards: [],
       title: "Техническое интервью",
     },
     {
-      id: "8e5cc7a0-314d-11eb-bfe1-2bcaa783a21c",
+      id: "4",
       cards: [],
       title: "Согласование оффера",
     },
@@ -120,7 +200,22 @@ const Index = () => {
   return (
     <Wrapper>
       <Box>
-        <Board canAddLanes onChange={console.log} data={data} />
+        <Board
+          canAddLanes
+          handleDragEnd={(
+            cardId,
+            sourceLaneId,
+            targetLaneId,
+            position,
+            cardDetails
+          ) => {
+            fetch("/api/trigger", {
+              method: "POST",
+              body: JSON.stringify({ targetLaneId }),
+            });
+          }}
+          data={data}
+        />
       </Box>
     </Wrapper>
   );

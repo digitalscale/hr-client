@@ -67,7 +67,6 @@ const Vacancy: React.FC<Props> = ({ data }) => {
     experience,
     group,
   } = data;
-  console.log();
   return (
     <Flex alignItems="flex-start" flexDirection="column">
       <VacancyHeader active="tab1" vacancy={vacancy} experience={experience} />
