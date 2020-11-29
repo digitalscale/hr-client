@@ -6,6 +6,7 @@ export default (req, res) => {
   console.log(targetLaneId, JSON.parse(req.body));
   switch (targetLaneId) {
     case "1":
+      fetch('https://gbp-bot.herokuapp.com/send')
       console.log("Телега");
       break;
     case "2":
